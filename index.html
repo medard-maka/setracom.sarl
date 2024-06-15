@@ -1,328 +1,57 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html>
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SETRACOM sarl - Accueil</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <style>
-    /* Styles CSS personnalisés */
-    body {
-      width: 100%;
-    }
-
-    .jumbotron {
-      background-color: rgb(222, 160, 13);
-      padding: 50px;
-      width: 100%;
-    }
-
-    .jumbotron h1 {
-      font-size: 40px;
-      font-weight: bold;
-    }
-
-    .ilog {
-      border-radius: 80%;
-    }
-
-    .lead {
-      font-size: 25px;
-    }
-
-    section {
-      padding: 50px 0;
-    }
-
-    h2 {
-      font-size: 38px;
-      text-align: center;
-      margin-bottom: 30px;
-      font-weight: bold;
-    }
-
-    .card {
-      box-shadow: 0 9px 16px rgba(0, 0, 0, 0.4);
-      transition: box-shadow 0.3s ease-in-out;
-    }
-
-    .card-img-top {
-      height: 300px;
-      object-fit: cover;
-    }
-
-    .card-title {
-      font-size: 30px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .card-text {
-      font-size: 20px;
-    }
-
-    .footer {
-      background-color: rgb(222, 160, 13);
-      color: #fff;
-      padding: 20px 0;
-      width: 100%;
-      text-align: center;
-    }
-
-    .footer-icons {
-      margin-top: 20px;
-    }
-
-    .footer-icons i {
-      font-size: 35px;
-      margin: 0 10px;
-      color: #fff;
-    }
-
-    .social-icons {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      text-align: center;
-    }
-
-    .social-icons li {
-      display: inline-block;
-      margin: 0 10px;
-    }
-
-    .social-icons li a {
-      color: #222221;
-      font-size: 35px;
-    }
-
-    .form-container {
-      width: 100%;
-      margin: 0 auto;
-      background-color: #fff;
-      padding: 40px;
-      border-radius: 10px;
-      box-shadow: 0 0 11px rgba(0, 0, 0, 0.4);
-    }
-
-    .form-group {
-      position: relative;
-    }
-
-    .form-group label {
-      position: absolute;
-      top: -20px;
-      left: 0;
-      font-size: 14px;
-      font-weight: bold;
-      color: #555;
-      transition: all 0.3s ease;
-    }
-      
-    .form-group input:focus ~ label,
-    .form-group input:valid ~ label,
-    .form-group textarea:focus ~ label,
-    .form-group textarea:valid ~ label {
-      top: -30px;
-      font-size: 12px;
-      color: #888;
-    }
-      
-    .form-group input:focus,
-    .form-group textarea:focus {
-      box-shadow: 0 0 11px rgba(0, 0, 0, 0.4);
-    }
-      
-    .form-group input[type="text"],
-    .form-group input[type="email"],
-    .form-group textarea {
-      border: none;
-      border-bottom: 2px solid #ddd;
-      padding: 5px 0;
-      font-size: 16px;
-      transition: all 0.3s ease;
-    }
-      
-    .btn-submit {
-      background-color:  rgb(222, 160, 13);
-      border: none;
-      color: #fff;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 5px;
-      cursor: pointer;
-      width: 100%;
-      transition: background-color 0.3s ease;
-    }
-      
-    .btn-submit:hover {
-      background-color:#007bff;
-    }
-      
-    .king{
-      align-items: center;
-      }
-  </style>
+    <title>Affichage des valeurs de ThingSpeak</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
+
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#"><img src="logo.jpg" alt="Logo" style="height: 30px;"></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="#accueil">Accueil</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#apropos">À propos</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#services">Services</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#portfolio">Portrait</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#contact">Contact</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
-  
-  <header id="accueil" class="jumbotron jumbotron-fluid">
-    <div class="container text-center">
-      <h1 class="display-4">SETRACOM</h1>
-      <h2></h2>
-      <img class="ilog" src="logo.jpg" alt="logo">
-      <h1></h1>
-      <p class="lead">Bienvenue chez SETRACOM</p>
-      <div class="king">
-        <ul class="social-icons text-center">
-          <li><a href="https://www.facebook.com/profile.php?id=100069169820302"><i class="fab fa-facebook"></i></a></li>
-          <li><a href="https://www.instagram.com/invites/contact/?i=1du7fju84l2tf&utm_content=o2573be"><i class="fab fa-twitter"></i></a></li>
-          <li><a href="tel:+243977261174"><i class="fab fa-whatsapp"></i></a></li>
-          <li><a href="email:Setracomsarl243@gmail.com"><i class="fas fa-envelope"></i></a></li>
-          <li><a href="istagram:www.instagram.com/invites/contact/?i=1du7fju84l2tf&utm_content=o2573be"><i class="fab fa-instagram"></i></a></li>
-        </ul>
-      </div>
-    </div>
-  </header>
-  
-  <section id="apropos" class="py-5">
-    <div class="container">
-      <h2 class="text-center">À propos de nous</h2>
-      <p>Nous sommes une entreprise de construction polyvalente qui se spécialise dans les bâtiments commerciaux et résidentiels. Nous avons une équipe expérimentée de professionnels de la construction qui travaillent ensemble pour offrir des résultats de haute qualité à nos clients. Notre objectif est de fournir des services de construction fiables et durables, en respectant les délais et les budgets convenus.</p>
-    </div>
-  </section>
-  
-  <section id="services" class="bg-light py-5">
-    <div class="container">
-      <h2 class="text-center">Nos services</h2>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <img class="card-img-top" src="arch2.jpg" alt="Service 1">
-            <div class="card-body">
-              <h5 class="card-title">Construction</h5>
-              <p class="card-text">structure et norme de la construction </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <img class="card-img-top" src="arch.jpg" alt="Service 2">
-            <div class="card-body">
-              <h5 class="card-title">Architecture</h5>
-              <p class="card-text">voici l'architecture externe et interne</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <img class="card-img-top" src="ir.jpg" alt="Service 3">
-            <div class="card-body">
-              <h5 class="card-title">Pont et chaussé</h5>
-              <p class="card-text">excellente expertise en génie civil</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  
-  <section id="portfolio" class="py-5">
-    <div class="container">
-      <h2 class="text-center">Notre portrait</h2>
-      <!-- Ajoutez ici votre galerie d'images/portfolio -->
-      
-        <div class="card mb-4">
-          <img class="card-img-top" src="grp.jpg" alt="Service 2">
-          <div class="card-body">
-            <h5 class="card-title"></h5>
-            <p class="card-text">nos ingenieurs</p>
-          </div>
-        </div>
-      
-     
-      
-  </section>
-  
-  <section id="contact" class="bg-light py-5">
-    <div class="container">
-      <h2 class="text-center">Contactez-nous</h2>
-      <!-- Ajoutez ici votre formulaire de contact -->
-      
-    
-  </head>
-  <body>
-    <div class="container mt-5">
-      <div class="form-container">
-        <h2 class="text-center mb-4">Formulaire de Contact</h2>
-        <form id="contact-form">
-          <div class="form-group">
-            <input type="text" name="name" id="name" class="form-control" required>
-            <label for="name"><i class="fas fa-user"></i> Nom</label>
-          </div>
-          <div class="form-group">
-            <input type="email" name="email" id="email" class="form-control" required>
-            <label for="email"><i class="fas fa-envelope"></i> Email</label>
-          </div>
-          <div class="form-group">
-            <textarea name="message" id="message" class="form-control" rows="5" required></textarea>
-            <label for="message"><i class="fas fa-comments"></i> Message</label>
-          </div>
-          <button type="submit" class="btn btn-submit btn-block"><i class="fas fa-paper-plane"></i> Envoyer</button>
-        </form>
-      </div>
-    </div>
+    <h1>Valeurs de ThingSpeak</h1>
+    <div id="chart_div" style="width: 100%; height: 500px;"></div>
 
-    </div>
-  </section>
-  
-  <footer class="footer">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <p class="text-center">&copy; 2023 SETRACOM - la solution qu'il vous faut</p>
-        </div>
-        <div class="col-md-6">
-          <ul class="social-icons text-center">
-            <li><a href="https://www.facebook.com/profile.php?id=100069169820302"><i class="fab fa-facebook"></i></a></li>
-            <li><a href="https://www.instagram.com/invites/contact/?i=1du7fju84l2tf&utm_content=o2573be"><i class="fab fa-twitter"></i></a></li>
-            <li><a href="tel:+243977261174"><i class="fab fa-whatsapp"></i></a></li>
-            <li><a href="email:Setracomsarl243@gmail.com"><i class="fas fa-envelope"></i></a></li>
-            <li><a href="istagram:www.instagram.com/invites/contact/?i=1du7fju84l2tf&utm_content=o2573be"><i class="fab fa-instagram"></i></a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </footer>
+    <script>
+        // Configuration de ThingSpeak
+        var channelID = 2572384;
+        var apiKey = "TRGVC21EUJJTJ9U7";
 
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        // Chargement de la bibliothèque Google Charts
+        google.charts.load('current', {
+            'packages': ['corechart']
+        });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            // Récupération des données de ThingSpeak
+            $.getJSON("https://api.thingspeak.com/channels/" + channelID + "/feeds.json?api_key=" + apiKey + "&results=1", function(data) {
+                var latestFeed = data.feeds[0];
+
+                // Création des données pour le graphique
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Champ');
+                data.addColumn('number', 'Valeur');
+                data.addRows([
+                    ['Champ 1', latestFeed.field1],
+                    ['Champ 2', latestFeed.field2],
+                    ['Champ 3', latestFeed.field3],
+                    ['Champ 4', latestFeed.field4],
+                    ['Champ 5', latestFeed.field5],
+                    ['Champ 6', latestFeed.field6]
+                ]);
+
+                // Création et affichage du graphique
+                var options = {
+                    title: 'Valeurs mesurées',
+                    is3D: true,
+                    backgroundColor: 'transparent'
+                };
+
+                var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+                chart.draw(data, options);
+            });
+        }
+    </script>
 </body>
+
 </html>
