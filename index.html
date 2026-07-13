@@ -1,57 +1,1026 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="fr">
 <head>
-    <title>Affichage des valeurs de ThingSpeak</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://www.gstatic.com/charts/loader.js"></script>
-</head>
-
-<body>
-    <h1>Valeurs de ThingSpeak</h1>
-    <div id="chart_div" style="width: 100%; height: 500px;"></div>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lémon Graphix — Galerie Collaborative</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // Configuration de ThingSpeak
-        var channelID = 2572384;
-        var apiKey = "TRGVC21EUJJTJ9U7";
-
-        // Chargement de la bibliothèque Google Charts
-        google.charts.load('current', {
-            'packages': ['corechart']
-        });
-        google.charts.setOnLoadCallback(drawChart);
-
-        function drawChart() {
-            // Récupération des données de ThingSpeak
-            $.getJSON("https://api.thingspeak.com/channels/" + channelID + "/feeds.json?api_key=" + apiKey + "&results=1", function(data) {
-                var latestFeed = data.feeds[0];
-
-                // Création des données pour le graphique
-                var data = new google.visualization.DataTable();
-                data.addColumn('string', 'Champ');
-                data.addColumn('number', 'Valeur');
-                data.addRows([
-                    ['Champ 1', latestFeed.field1],
-                    ['Champ 2', latestFeed.field2],
-                    ['Champ 3', latestFeed.field3],
-                    ['Champ 4', latestFeed.field4],
-                    ['Champ 5', latestFeed.field5],
-                    ['Champ 6', latestFeed.field6]
-                ]);
-
-                // Création et affichage du graphique
-                var options = {
-                    title: 'Valeurs mesurées',
-                    is3D: true,
-                    backgroundColor: 'transparent'
-                };
-
-                var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-                chart.draw(data, options);
-            });
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { outfit: ['Outfit','sans-serif'], space: ['Space Grotesk','sans-serif'] },
+                    colors: {
+                        lemon: { 50:'#f7fee7',100:'#ecfccb',200:'#d9f99d',300:'#bef264',400:'#a3e635',500:'#84cc16',600:'#65a30d',700:'#4d7c0f',800:'#3f6212',900:'#365314' },
+                        dark: { 50:'#f6f6f7',100:'#e1e1e4',200:'#c2c2c9',300:'#9d9da8',400:'#7a7a87',500:'#5e5e6b',600:'#4b4b56',700:'#3f3f48',800:'#35353c',900:'#1a1a1f',950:'#0d0d11' }
+                    }
+                }
+            }
         }
     </script>
-</body>
+    <style>
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+        @keyframes pulse-glow { 0%,100%{box-shadow:0 0 20px rgba(163,230,53,0.3)} 50%{box-shadow:0 0 40px rgba(163,230,53,0.6)} }
+        @keyframes fade-in-up { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes heartbeat { 0%,100%{transform:scale(1)} 25%{transform:scale(1.2)} 50%{transform:scale(0.95)} 75%{transform:scale(1.1)} }
+        @keyframes gradient-shift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+        @keyframes spin-slow { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+        @keyframes slide-in-right { from{transform:translateX(100%);opacity:0} to{transform:translateX(0);opacity:1} }
+        .animate-float { animation:float 4s ease-in-out infinite }
+        .animate-pulse-glow { animation:pulse-glow 3s ease-in-out infinite }
+        .animate-fade-in-up { animation:fade-in-up 0.6s ease-out forwards }
+        .animate-heartbeat { animation:heartbeat 0.4s ease-in-out }
+        .animate-spin-slow { animation:spin-slow 20s linear infinite }
+        .animate-slide-in-right { animation:slide-in-right 0.5s ease-out forwards }
+        .gradient-text { background:linear-gradient(135deg,#a3e635 0%,#65a30d 50%,#bef264 100%); background-size:200% 200%; -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; animation:gradient-shift 4s ease infinite }
+        .glass-card { background:rgba(26,26,31,0.7); backdrop-filter:blur(12px); border:1px solid rgba(163,230,53,0.1) }
+        .glass-card:hover { border-color:rgba(163,230,53,0.3); box-shadow:0 0 30px rgba(163,230,53,0.1) }
+        .card-zoom { transition:transform 0.5s cubic-bezier(0.4,0,0.2,1) }
+        .card-zoom:hover { transform:scale(1.03) }
+        .card-zoom img { transition:transform 0.6s cubic-bezier(0.4,0,0.2,1) }
+        .card-zoom:hover img { transform:scale(1.1) }
+        .btn-primary { background:linear-gradient(135deg,#a3e635 0%,#65a30d 100%); transition:all 0.3s ease }
+        .btn-primary:hover { transform:translateY(-2px); box-shadow:0 10px 30px rgba(163,230,53,0.4) }
+        .btn-outline-lemon { border:2px solid rgba(163,230,53,0.5); color:#a3e635; transition:all 0.3s ease }
+        .btn-outline-lemon:hover { background:rgba(163,230,53,0.1); border-color:#a3e635; box-shadow:0 0 20px rgba(163,230,53,0.2) }
+        .filter-btn.active { background:linear-gradient(135deg,#a3e635 0%,#65a30d 100%); color:#0d0d11; font-weight:600 }
+        ::-webkit-scrollbar { width:8px }
+        ::-webkit-scrollbar-track { background:#0d0d11 }
+        ::-webkit-scrollbar-thumb { background:#3f6212; border-radius:4px }
+        ::-webkit-scrollbar-thumb:hover { background:#65a30d }
+        .modal-backdrop { backdrop-filter:blur(8px); background:rgba(13,13,17,0.85) }
+        .loader { border:3px solid rgba(163,230,53,0.2); border-top:3px solid #a3e635; border-radius:50%; width:40px; height:40px; animation:spin 1s linear infinite }
+        @keyframes spin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+        .lightbox-overlay { backdrop-filter:blur(20px); background:rgba(13,13,17,0.95) }
+        .grid-bg { background-image:linear-gradient(rgba(163,230,53,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(163,230,53,0.03) 1px,transparent 1px); background-size:50px 50px }
+        .reveal { opacity:0; transform:translateY(40px); transition:all 0.8s cubic-bezier(0.4,0,0.2,1) }
+        .reveal.visible { opacity:1; transform:translateY(0) }
+        .shine-effect { position:relative; overflow:hidden }
+        .shine-effect::after { content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background:linear-gradient(45deg,transparent 40%,rgba(163,230,53,0.05) 50%,transparent 60%); transform:translateX(-100%); transition:transform 0.6s }
+        .shine-effect:hover::after { transform:translateX(100%) }
+        .status-dot { width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:6px }
+        .status-connected { background:#a3e635; box-shadow:0 0 8px #a3e635 }
+        .status-connecting { background:#f59e0b; animation:pulse 1s infinite }
+        .status-disconnected { background:#ef4444 }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+        .toast { transform:translateX(120%); transition:transform 0.4s cubic-bezier(0.4,0,0.2,1) }
+        .toast.show { transform:translateX(0) }
+        .upload-zone { border:2px dashed rgba(163,230,53,0.3); transition:all 0.3s ease }
+        .upload-zone:hover,.upload-zone.dragover { border-color:#a3e635; background:rgba(163,230,53,0.05) }
+        .upload-zone.dragover { transform:scale(1.02) }
+        .comment-bubble { position:relative }
+        .comment-bubble::before { content:''; position:absolute; left:-6px; top:12px; width:0; height:0; border-top:6px solid transparent; border-bottom:6px solid transparent; border-right:6px solid rgba(53,53,60,0.8) }
+        .comments-scroll::-webkit-scrollbar { width:4px }
+        .comments-scroll::-webkit-scrollbar-track { background:transparent }
+        .comments-scroll::-webkit-scrollbar-thumb { background:#3f6212; border-radius:2px }
+        .delete-btn { opacity:0; transform:scale(0.8); transition:all 0.3s ease }
+        .card-zoom:hover .delete-btn { opacity:1; transform:scale(1) }
+        .contact-owner-btn { transition:all 0.3s ease }
+        .contact-owner-btn:hover { background:rgba(163,230,53,0.2); transform:translateX(4px) }
+        .progress-bar { height:4px; background:linear-gradient(90deg,#a3e635,#65a30d); border-radius:2px; transition:width 0.3s ease }
+    </style>
+<base target="_blank">
+</head>
+<body class="bg-dark-950 text-gray-200 font-outfit overflow-x-hidden grid-bg min-h-screen">
+<!-- NAVBAR -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20">
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-lemon-400 to-lemon-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-lemon text-dark-900 text-lg"></i>
+                </div>
+                <span class="text-xl font-bold font-space text-white">Lémon <span class="gradient-text">Graphix</span></span>
+            </a>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#hero" class="text-gray-400 hover:text-lemon-400 transition-colors text-sm font-medium">Accueil</a>
+                <a href="#gallery" class="text-gray-400 hover:text-lemon-400 transition-colors text-sm font-medium">Galerie</a>
+                <a href="#about" class="text-gray-400 hover:text-lemon-400 transition-colors text-sm font-medium">À propos</a>
+                <a href="#contact" class="text-gray-400 hover:text-lemon-400 transition-colors text-sm font-medium">Contact</a>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="hidden sm:flex items-center text-xs text-gray-500 mr-2" id="connection-status">
+                    <span class="status-dot status-connecting" id="status-dot"></span>
+                    <span id="status-text">Connexion...</span>
+                </div>
+                <button onclick="openModal()" class="btn-primary px-5 py-2.5 rounded-full text-dark-900 font-bold text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i><span class="hidden sm:inline">Publier un Design</span><span class="sm:hidden">Publier</span>
+                </button>
+                <button id="mobile-menu-btn" class="md:hidden text-gray-400 hover:text-white text-xl"><i class="fa-solid fa-bars"></i></button>
+            </div>
+        </div>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden bg-dark-900/95 backdrop-blur-lg border-t border-dark-800">
+        <div class="px-4 py-4 space-y-3">
+            <a href="#hero" class="block text-gray-400 hover:text-lemon-400 py-2">Accueil</a>
+            <a href="#gallery" class="block text-gray-400 hover:text-lemon-400 py-2">Galerie</a>
+            <a href="#about" class="block text-gray-400 hover:text-lemon-400 py-2">À propos</a>
+            <a href="#contact" class="block text-gray-400 hover:text-lemon-400 py-2">Contact</a>
+        </div>
+    </div>
+</nav>
 
+<!-- HERO -->
+<section id="hero" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-20 left-10 w-72 h-72 bg-lemon-500/10 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute bottom-20 right-10 w-96 h-96 bg-lemon-600/5 rounded-full blur-3xl animate-float" style="animation-delay:-2s"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-lemon-400/5 rounded-full blur-3xl"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] border border-lemon-500/10 rounded-full animate-spin-slow"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] border border-lemon-500/5 rounded-full animate-spin-slow" style="animation-direction:reverse;animation-duration:30s"></div>
+    </div>
+    <div class="relative z-10 max-w-5xl mx-auto px-4 text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-lemon-500/10 border border-lemon-500/20 text-lemon-400 text-sm font-medium mb-8 animate-fade-in-up">
+            <span class="w-2 h-2 rounded-full bg-lemon-400 animate-pulse"></span>Galerie collaborative en temps réel
+        </div>
+        <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black font-space leading-tight mb-6 animate-fade-in-up" style="animation-delay:0.1s">
+            Donnez vie à vos idées<br>avec <span class="gradient-text">Lémon Graphix</span>
+        </h1>
+        <p class="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto mb-10 animate-fade-in-up" style="animation-delay:0.2s">
+            Rejoignez une communauté de créatifs passionnés. Partagez vos designs, découvrez des œuvres inspirantes, commentez et collaborez en temps réel avec des artistes du monde entier.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up" style="animation-delay:0.3s">
+            <a href="#gallery" class="btn-primary px-8 py-4 rounded-full text-dark-900 font-bold text-lg flex items-center gap-3"><i class="fa-solid fa-compass"></i>Explorer la Galerie</a>
+            <button onclick="openModal()" class="btn-outline-lemon px-8 py-4 rounded-full font-bold text-lg flex items-center gap-3"><i class="fa-solid fa-cloud-arrow-up"></i>Publier un Design</button>
+        </div>
+        <div class="mt-16 grid grid-cols-3 gap-8 max-w-lg mx-auto animate-fade-in-up" style="animation-delay:0.4s">
+            <div class="text-center"><div class="text-3xl font-black text-white font-space" id="stat-count">0</div><div class="text-sm text-gray-500 mt-1">Designs</div></div>
+            <div class="text-center"><div class="text-3xl font-black text-white font-space" id="stat-likes">0</div><div class="text-sm text-gray-500 mt-1">Likes</div></div>
+            <div class="text-center"><div class="text-3xl font-black text-white font-space" id="stat-comments">0</div><div class="text-sm text-gray-500 mt-1">Commentaires</div></div>
+        </div>
+    </div>
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+        <a href="#gallery" class="text-gray-500 hover:text-lemon-400 transition-colors"><i class="fa-solid fa-chevron-down text-2xl"></i></a>
+    </div>
+</section>
+
+<!-- GALERIE -->
+<section id="gallery" class="py-24 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 reveal">
+            <h2 class="text-4xl sm:text-5xl font-black font-space text-white mb-4">La <span class="gradient-text">Galerie</span> Collaborative</h2>
+            <p class="text-gray-400 text-lg max-w-2xl mx-auto">Découvrez les créations de la communauté. Filtrez par catégorie, likez, commentez et contactez les artistes.</p>
+        </div>
+        <div class="flex flex-wrap items-center justify-center gap-3 mb-12 reveal">
+            <button class="filter-btn active px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border border-lemon-500/30" data-filter="all"><i class="fa-solid fa-layer-group mr-2"></i>Tous</button>
+            <button class="filter-btn px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border border-dark-700 text-gray-400 hover:border-lemon-500/30 hover:text-lemon-400" data-filter="Logos"><i class="fa-solid fa-shapes mr-2"></i>Logos</button>
+            <button class="filter-btn px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border border-dark-700 text-gray-400 hover:border-lemon-500/30 hover:text-lemon-400" data-filter="Affiches"><i class="fa-solid fa-image mr-2"></i>Affiches</button>
+            <button class="filter-btn px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border border-dark-700 text-gray-400 hover:border-lemon-500/30 hover:text-lemon-400" data-filter="Motion Design"><i class="fa-solid fa-film mr-2"></i>Motion Design</button>
+            <button class="filter-btn px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border border-dark-700 text-gray-400 hover:border-lemon-500/30 hover:text-lemon-400" data-filter="Identité Visuelle"><i class="fa-solid fa-fingerprint mr-2"></i>Identité Visuelle</button>
+        </div>
+        <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+        <div id="gallery-loader" class="flex justify-center py-16"><div class="loader"></div></div>
+        <div id="gallery-empty" class="hidden text-center py-16">
+            <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-dark-800 flex items-center justify-center"><i class="fa-regular fa-folder-open text-3xl text-gray-600"></i></div>
+            <p class="text-gray-500 text-lg">Aucun design dans cette catégorie pour le moment.</p>
+            <p class="text-gray-600 text-sm mt-2">Soyez le premier à publier !</p>
+        </div>
+    </div>
+</section>
+<!-- ABOUT -->
+<section id="about" class="py-24 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-dark-950 via-dark-900/50 to-dark-950"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <div class="reveal">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-lemon-500/10 border border-lemon-500/20 text-lemon-400 text-sm font-medium mb-6"><i class="fa-solid fa-star"></i>Notre Vision</div>
+                <h2 class="text-4xl sm:text-5xl font-black font-space text-white mb-6">L'art du design,<br><span class="gradient-text">sans limites</span></h2>
+                <p class="text-gray-400 text-lg leading-relaxed mb-6">Lémon Graphix est bien plus qu'une simple galerie. C'est un espace de création libre où chaque visiteur peut partager sa vision artistique, recevoir des commentaires et entrer en contact direct avec d'autres créatifs.</p>
+                <p class="text-gray-400 text-lg leading-relaxed mb-8">Publiez vos designs depuis vos fichiers locaux, recevez des likes et des commentaires en temps réel, et contactez directement les artistes qui vous inspirent.</p>
+                <div class="flex flex-wrap gap-4">
+                    <div class="flex items-center gap-3 px-5 py-3 rounded-xl bg-dark-800/50 border border-dark-700">
+                        <div class="w-10 h-10 rounded-lg bg-lemon-500/20 flex items-center justify-center"><i class="fa-solid fa-bolt text-lemon-400"></i></div>
+                        <div><div class="text-white font-semibold text-sm">Temps Réel</div><div class="text-gray-500 text-xs">Synchronisation instantanée</div></div>
+                    </div>
+                    <div class="flex items-center gap-3 px-5 py-3 rounded-xl bg-dark-800/50 border border-dark-700">
+                        <div class="w-10 h-10 rounded-lg bg-lemon-500/20 flex items-center justify-center"><i class="fa-solid fa-comments text-lemon-400"></i></div>
+                        <div><div class="text-white font-semibold text-sm">Commentaires</div><div class="text-gray-500 text-xs">Échangez avec la communauté</div></div>
+                    </div>
+                    <div class="flex items-center gap-3 px-5 py-3 rounded-xl bg-dark-800/50 border border-dark-700">
+                        <div class="w-10 h-10 rounded-lg bg-lemon-500/20 flex items-center justify-center"><i class="fa-solid fa-envelope text-lemon-400"></i></div>
+                        <div><div class="text-white font-semibold text-sm">Contact Direct</div><div class="text-gray-500 text-xs">Contactez les artistes</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="relative reveal">
+                <div class="relative rounded-2xl overflow-hidden border border-dark-700">
+                    <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&h=600&fit=crop" alt="Design créatif" class="w-full h-auto object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-dark-900/80 to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-lemon-400 to-lemon-600 flex items-center justify-center text-dark-900 font-bold text-lg">L</div>
+                            <div><div class="text-white font-bold">Lémon Graphix</div><div class="text-lemon-400 text-sm">Studio Créatif</div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -top-4 -right-4 bg-lemon-500 text-dark-900 px-4 py-2 rounded-full font-bold text-sm shadow-lg shadow-lemon-500/30 animate-float"><i class="fa-solid fa-heart mr-1"></i> 100% Gratuit</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT / CTA -->
+<section id="contact" class="py-24 relative">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
+        <div class="rounded-3xl bg-gradient-to-br from-dark-900 to-dark-800 border border-lemon-500/20 p-12 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-lemon-500/5 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-0 left-0 w-48 h-48 bg-lemon-600/5 rounded-full blur-3xl"></div>
+            <h2 class="text-4xl sm:text-5xl font-black font-space text-white mb-6 relative z-10">Prêt à <span class="gradient-text">briller</span> ?</h2>
+            <p class="text-gray-400 text-lg mb-10 max-w-xl mx-auto relative z-10">Rejoignez la communauté Lémon Graphix dès maintenant. Publiez votre premier design et faites partie de quelque chose de grand.</p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10">
+                <button onclick="openModal()" class="btn-primary px-8 py-4 rounded-full text-dark-900 font-bold text-lg flex items-center gap-3"><i class="fa-solid fa-rocket"></i>Commencer maintenant</button>
+                <a href="https://wa.me/243851959265?text=Bonjour%20L%C3%A9mon%20Graphix%2C%20je%20souhaite%20collaborer%20avec%20vous%20sur%20un%20projet%20de%20design%20%21" target="_blank" class="btn-outline-lemon px-8 py-4 rounded-full font-bold text-lg flex items-center gap-3"><i class="fa-brands fa-whatsapp"></i>Discuter sur WhatsApp</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="border-t border-dark-800 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-lemon-400 to-lemon-600 flex items-center justify-center"><i class="fa-solid fa-lemon text-dark-900 text-sm"></i></div>
+                <span class="text-lg font-bold font-space text-white">Lémon <span class="text-lemon-400">Graphix</span></span>
+            </div>
+            <div class="flex items-center gap-6 text-sm text-gray-500">
+                <span>© 2026 Lémon Graphix</span>
+                <span class="hidden sm:inline">•</span>
+                <span class="hidden sm:inline">Galerie collaborative en temps réel</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="#" class="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center text-gray-400 hover:text-lemon-400 hover:bg-dark-700 transition-all"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center text-gray-400 hover:text-lemon-400 hover:bg-dark-700 transition-all"><i class="fa-brands fa-behance"></i></a>
+                <a href="#" class="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center text-gray-400 hover:text-lemon-400 hover:bg-dark-700 transition-all"><i class="fa-brands fa-dribbble"></i></a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/243856213630?text=Bonjour%20L%C3%A9mon%20Graphix%2C%20je%20souhaite%20collaborer%20avec%20vous%20sur%20un%20projet%20de%20design%20%21" target="_blank" class="fixed bottom-6 right-6 z-50 w-14 h-14 bg-green-500 rounded-full flex items-center justify-center shadow-lg shadow-green-500/30 hover:scale-110 transition-transform animate-pulse-glow group" title="Collaborer sur WhatsApp">
+    <i class="fa-brands fa-whatsapp text-white text-2xl group-hover:animate-bounce"></i>
+</a>
+
+<!-- MODAL PUBLICATION -->
+<div id="publish-modal" class="fixed inset-0 z-[100] hidden">
+    <div class="modal-backdrop absolute inset-0" onclick="closeModal()"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+        <div class="bg-dark-900 border border-dark-700 rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl shadow-black/50 transform scale-95 opacity-0 transition-all duration-300" id="modal-content">
+            <div class="flex items-center justify-between p-6 border-b border-dark-800">
+                <div>
+                    <h3 class="text-xl font-bold text-white font-space">Publier un Design</h3>
+                    <p class="text-gray-500 text-sm mt-1">Partagez votre création avec la communauté</p>
+                </div>
+                <button onclick="closeModal()" class="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center text-gray-400 hover:text-white hover:bg-dark-700 transition-all"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="publish-form" class="p-6 space-y-5">
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Titre du design</label>
+                    <input type="text" id="design-title" required class="w-full px-4 py-3 rounded-xl bg-dark-800 border border-dark-700 text-white placeholder-gray-600 focus:border-lemon-500 focus:ring-2 focus:ring-lemon-500/20 outline-none transition-all" placeholder="Ex: Logo minimaliste pour startup tech">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Catégorie</label>
+                    <select id="design-category" required class="w-full px-4 py-3 rounded-xl bg-dark-800 border border-dark-700 text-white focus:border-lemon-500 focus:ring-2 focus:ring-lemon-500/20 outline-none transition-all appearance-none cursor-pointer">
+                        <option value="">Choisir une catégorie...</option>
+                        <option value="Logos">Logos</option>
+                        <option value="Affiches">Affiches</option>
+                        <option value="Motion Design">Motion Design</option>
+                        <option value="Identité Visuelle">Identité Visuelle</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Votre nom</label>
+                        <input type="text" id="design-author" required class="w-full px-4 py-3 rounded-xl bg-dark-800 border border-dark-700 text-white placeholder-gray-600 focus:border-lemon-500 focus:ring-2 focus:ring-lemon-500/20 outline-none transition-all" placeholder="Ex: Jean Dupont">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Votre email</label>
+                        <input type="email" id="design-email" required class="w-full px-4 py-3 rounded-xl bg-dark-800 border border-dark-700 text-white placeholder-gray-600 focus:border-lemon-500 focus:ring-2 focus:ring-lemon-500/20 outline-none transition-all" placeholder="exemple@email.com">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Image du design</label>
+                    <div id="upload-zone" class="upload-zone rounded-xl p-8 text-center cursor-pointer relative">
+                        <input type="file" id="design-file" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                        <div id="upload-placeholder">
+                            <i class="fa-solid fa-cloud-arrow-up text-4xl text-lemon-500/50 mb-3"></i>
+                            <p class="text-gray-400 text-sm mb-1">Glissez-déposez une image ici</p>
+                            <p class="text-gray-600 text-xs">ou cliquez pour parcourir vos fichiers</p>
+                            <p class="text-gray-600 text-xs mt-1">JPG, PNG, WebP — max 5 Mo</p>
+                        </div>
+                        <div id="upload-preview" class="hidden">
+                            <img id="file-preview-img" src="" alt="Prévisualisation" class="max-h-48 mx-auto rounded-lg mb-3 object-contain">
+                            <p id="file-name" class="text-lemon-400 text-sm font-medium"></p>
+                            <button type="button" onclick="clearFileUpload(event)" class="text-gray-500 hover:text-red-400 text-xs mt-2 underline"><i class="fa-solid fa-trash mr-1"></i>Supprimer ce fichier</button>
+                        </div>
+                        <div id="upload-progress" class="hidden mt-3">
+                            <div class="w-full bg-dark-800 rounded-full h-1"><div id="progress-bar" class="progress-bar" style="width:0%"></div></div>
+                            <p id="progress-text" class="text-gray-500 text-xs mt-1">Upload en cours...</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 my-3">
+                        <div class="flex-1 h-px bg-dark-700"></div>
+                        <span class="text-gray-600 text-xs">OU</span>
+                        <div class="flex-1 h-px bg-dark-700"></div>
+                    </div>
+                    <input type="url" id="design-image-url" class="w-full px-4 py-3 rounded-xl bg-dark-800 border border-dark-700 text-white placeholder-gray-600 focus:border-lemon-500 focus:ring-2 focus:ring-lemon-500/20 outline-none transition-all" placeholder="https://exemple.com/mon-design.jpg">
+                </div>
+                <button type="submit" id="submit-btn" class="w-full btn-primary py-4 rounded-xl text-dark-900 font-bold text-lg flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i><span id="submit-text">Publier mon Design</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" class="fixed inset-0 z-[100] hidden">
+    <div class="lightbox-overlay absolute inset-0" onclick="closeLightbox()"></div>
+    <button onclick="closeLightbox()" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-dark-800/80 backdrop-blur flex items-center justify-center text-white hover:bg-dark-700 transition-all"><i class="fa-solid fa-xmark text-lg"></i></button>
+    <div class="absolute inset-0 flex items-center justify-center p-2 sm:p-4">
+        <div class="relative w-full max-w-6xl max-h-[95vh] flex flex-col lg:flex-row bg-dark-900 rounded-2xl overflow-hidden shadow-2xl border border-dark-700">
+            <div class="lg:w-3/5 flex items-center justify-center bg-dark-950 p-4 relative">
+                <img id="lightbox-image" src="" alt="" class="max-w-full max-h-[50vh] lg:max-h-[85vh] object-contain rounded-xl">
+            </div>
+            <div class="lg:w-2/5 flex flex-col border-l border-dark-700 max-h-[50vh] lg:max-h-[95vh]">
+                <div class="p-5 border-b border-dark-700">
+                    <h3 id="lightbox-title" class="text-xl font-bold text-white font-space mb-2"></h3>
+                    <div class="flex flex-wrap items-center gap-3 text-sm text-gray-400">
+                        <span id="lightbox-author" class="flex items-center gap-1.5"><i class="fa-solid fa-user text-lemon-400"></i><span></span></span>
+                        <span class="text-dark-600">•</span>
+                        <span id="lightbox-category" class="flex items-center gap-1.5"><i class="fa-solid fa-tag text-lemon-400"></i><span></span></span>
+                    </div>
+                    <div class="flex items-center gap-3 mt-4">
+                        <button id="lightbox-like-btn" onclick="toggleLikeFromLightbox()" class="flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 bg-dark-800 text-gray-400 hover:text-red-400 hover:bg-red-500/10 border border-dark-700">
+                            <i class="fa-regular fa-heart"></i><span id="lightbox-likes-count">0</span>
+                        </button>
+                        <a id="lightbox-contact-btn" href="#" target="_blank" class="contact-owner-btn flex items-center gap-2 px-4 py-2 rounded-full bg-dark-800 text-lemon-400 border border-lemon-500/20 hover:border-lemon-500/50 text-sm font-medium">
+                            <i class="fa-solid fa-envelope"></i>Contacter l'auteur
+                        </a>
+                    </div>
+                </div>
+                <div class="flex-1 overflow-hidden flex flex-col">
+                    <div class="px-5 py-3 border-b border-dark-700 flex items-center justify-between">
+                        <h4 class="text-sm font-semibold text-white"><i class="fa-solid fa-comments text-lemon-400 mr-2"></i>Commentaires <span id="comments-count-badge" class="ml-2 px-2 py-0.5 rounded-full bg-lemon-500/20 text-lemon-400 text-xs">0</span></h4>
+                    </div>
+                    <div id="comments-list" class="flex-1 overflow-y-auto comments-scroll p-5 space-y-4">
+                        <p class="text-gray-600 text-sm text-center py-8">Aucun commentaire pour le moment. Soyez le premier !</p>
+                    </div>
+                    <div class="p-4 border-t border-dark-700 bg-dark-800/30">
+                        <form id="comment-form" class="space-y-3">
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="text" id="comment-name" required placeholder="Votre nom" class="px-3 py-2 rounded-lg bg-dark-800 border border-dark-700 text-white text-sm placeholder-gray-600 focus:border-lemon-500 focus:ring-1 focus:ring-lemon-500/20 outline-none transition-all">
+                                <input type="email" id="comment-email" required placeholder="Votre email" class="px-3 py-2 rounded-lg bg-dark-800 border border-dark-700 text-white text-sm placeholder-gray-600 focus:border-lemon-500 focus:ring-1 focus:ring-lemon-500/20 outline-none transition-all">
+                            </div>
+                            <div class="flex gap-2">
+                                <textarea id="comment-text" required rows="2" placeholder="Écrivez un commentaire..." class="flex-1 px-3 py-2 rounded-lg bg-dark-800 border border-dark-700 text-white text-sm placeholder-gray-600 focus:border-lemon-500 focus:ring-1 focus:ring-lemon-500/20 outline-none transition-all resize-none"></textarea>
+                                <button type="submit" class="px-4 py-2 rounded-lg bg-lemon-500 hover:bg-lemon-400 text-dark-900 font-bold transition-all hover:scale-105"><i class="fa-solid fa-paper-plane"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div id="toast-container" class="fixed top-24 right-4 z-[110] space-y-3"></div>
+<script>
+// ═══════════════════════════════════════════════════════════════
+// CONFIGURATION SUPABASE
+// ═══════════════════════════════════════════════════════════════
+const SUPABASE_URL = 'https://zkbearjbapeeodafjede.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_UttvENy8lmbqGtMdEqWMVg_uW1oW7zN';
+
+// ═══════════════════════════════════════════════════════════════
+// INITIALISATION SUPABASE
+// ═══════════════════════════════════════════════════════════════
+const { createClient } = supabase;
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ═══════════════════════════════════════════════════════════════
+// ÉTAT DE L'APPLICATION
+// ═══════════════════════════════════════════════════════════════
+let allDesigns = [];
+let allComments = [];
+let currentFilter = 'all';
+let currentLightboxDesignId = null;
+let likedDesigns = new Set();
+let uploadFile = null;
+
+// ═══════════════════════════════════════════════════════════════
+// RÉFÉRENCES DOM
+// ═══════════════════════════════════════════════════════════════
+const galleryGrid = document.getElementById('gallery-grid');
+const galleryLoader = document.getElementById('gallery-loader');
+const galleryEmpty = document.getElementById('gallery-empty');
+const modal = document.getElementById('publish-modal');
+const modalContent = document.getElementById('modal-content');
+const publishForm = document.getElementById('publish-form');
+const lightbox = document.getElementById('lightbox');
+const toastContainer = document.getElementById('toast-container');
+const navbar = document.getElementById('navbar');
+const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+const mobileMenu = document.getElementById('mobile-menu');
+
+// ═══════════════════════════════════════════════════════════════
+// INITIALISATION
+// ═══════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+    loadLikedDesigns();
+    fetchDesigns();
+    fetchComments();
+    subscribeToRealtime();
+    initFilters();
+    initScrollReveal();
+    initNavbarScroll();
+    initMobileMenu();
+    initFileUpload();
+    initCommentForm();
+});
+
+// ═══════════════════════════════════════════════════════════════
+// 1. RÉCUPÉRATION DES DESIGNS
+// ═══════════════════════════════════════════════════════════════
+async function fetchDesigns() {
+    try {
+        showLoader(true);
+        const { data, error } = await supabaseClient
+            .from('designs')
+            .select('*')
+            .order('created_at', { ascending: false });
+        if (error) throw error;
+        allDesigns = data || [];
+        updateStats();
+        renderGallery();
+        showLoader(false);
+    } catch (err) {
+        console.error('Erreur chargement designs:', err);
+        showToast('Erreur de connexion a la base de donnees', 'error');
+        showLoader(false);
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// 2. RÉCUPÉRATION DES COMMENTAIRES
+// ═══════════════════════════════════════════════════════════════
+async function fetchComments() {
+    try {
+        const { data, error } = await supabaseClient
+            .from('comments')
+            .select('*')
+            .order('created_at', { ascending: true });
+        if (error) throw error;
+        allComments = data || [];
+        updateStats();
+        if (currentLightboxDesignId) renderComments(currentLightboxDesignId);
+    } catch (err) {
+        console.error('Erreur chargement commentaires:', err);
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// 3. SOUSCRIPTION REALTIME
+// ═══════════════════════════════════════════════════════════════
+function subscribeToRealtime() {
+    updateConnectionStatus('connecting');
+    supabaseClient
+        .channel('designs-channel')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'designs' }, (payload) => {
+            handleRealtimeChange(payload, 'designs');
+        })
+        .subscribe((status) => {
+            if (status === 'SUBSCRIBED') {
+                updateConnectionStatus('connected');
+                console.log('Canal designs connecte');
+            }
+        });
+    supabaseClient
+        .channel('comments-channel')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'comments' }, (payload) => {
+            handleRealtimeChange(payload, 'comments');
+        })
+        .subscribe((status) => {
+            if (status === 'SUBSCRIBED') console.log('Canal comments connecte');
+        });
+}
+
+function handleRealtimeChange(payload, table) {
+    const { eventType, new: newRecord, old: oldRecord } = payload;
+    if (table === 'designs') {
+        switch (eventType) {
+            case 'INSERT':
+                allDesigns.unshift(newRecord);
+                updateStats();
+                renderGallery();
+                showToast('"' + newRecord.title + '" vient d etre publie !', 'success');
+                break;
+            case 'UPDATE':
+                const idx = allDesigns.findIndex(d => d.id === newRecord.id);
+                if (idx !== -1) {
+                    allDesigns[idx] = newRecord;
+                    renderGallery();
+                    if (currentLightboxDesignId === newRecord.id) updateLightboxLikes(newRecord.likes);
+                }
+                break;
+            case 'DELETE':
+                allDesigns = allDesigns.filter(d => d.id !== oldRecord.id);
+                updateStats();
+                renderGallery();
+                if (currentLightboxDesignId === oldRecord.id) closeLightbox();
+                showToast('Publication supprimee', 'info');
+                break;
+        }
+    } else if (table === 'comments') {
+        switch (eventType) {
+            case 'INSERT':
+                allComments.push(newRecord);
+                updateStats();
+                if (currentLightboxDesignId === newRecord.design_id) renderComments(currentLightboxDesignId);
+                break;
+            case 'DELETE':
+                allComments = allComments.filter(c => c.id !== oldRecord.id);
+                updateStats();
+                if (currentLightboxDesignId) renderComments(currentLightboxDesignId);
+                break;
+        }
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// 4. RENDU DE LA GALERIE
+// ═══════════════════════════════════════════════════════════════
+function renderGallery() {
+    const filtered = currentFilter === 'all' ? allDesigns : allDesigns.filter(d => d.category === currentFilter);
+    galleryGrid.innerHTML = '';
+    if (filtered.length === 0) {
+        galleryEmpty.classList.remove('hidden');
+        return;
+    }
+    galleryEmpty.classList.add('hidden');
+    filtered.forEach((design, index) => {
+        galleryGrid.appendChild(createDesignCard(design, index));
+    });
+}
+
+function createDesignCard(design, index) {
+    const isLiked = likedDesigns.has(design.id);
+    const commentCount = allComments.filter(c => c.design_id === design.id).length;
+    const card = document.createElement('div');
+    card.className = 'glass-card rounded-2xl overflow-hidden card-zoom shine-effect reveal visible relative group';
+    card.style.animationDelay = (index * 0.05) + 's';
+    card.innerHTML = `
+        <button onclick="deleteDesign(event,'${design.id}')" class="delete-btn absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-red-500/80 hover:bg-red-500 text-white flex items-center justify-center shadow-lg" title="Supprimer cette publication"><i class="fa-solid fa-trash text-xs"></i></button>
+        <div class="relative overflow-hidden cursor-pointer" onclick="openLightbox('${design.id}')">
+            <img src="${design.image_url}" alt="${design.title}" class="w-full h-64 object-cover" onerror="this.src='https://via.placeholder.com/400x300/1a1a1f/3f6212?text=Image+non+disponible'">
+            <div class="absolute inset-0 bg-gradient-to-t from-dark-900/90 via-dark-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="absolute bottom-4 left-4 right-4 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-between">
+                <span class="inline-block px-3 py-1 rounded-full bg-lemon-500/20 text-lemon-400 text-xs font-medium border border-lemon-500/30">${design.category}</span>
+                <span class="flex items-center gap-1 text-white text-xs"><i class="fa-solid fa-comment"></i> ${commentCount}</span>
+            </div>
+        </div>
+        <div class="p-5">
+            <h3 class="text-white font-bold text-lg mb-1 truncate">${design.title}</h3>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2 text-gray-500 text-sm"><i class="fa-solid fa-user-circle text-lemon-500/50"></i><span>${design.author}</span></div>
+                <button onclick="toggleLike(event,'${design.id}')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-300 ${isLiked ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 'bg-dark-800 text-gray-500 hover:text-red-400 hover:bg-red-500/10 border border-dark-700'}" id="like-btn-${design.id}">
+                    <i class="fa-${isLiked ? 'solid' : 'regular'} fa-heart ${isLiked ? 'animate-heartbeat' : ''}"></i>
+                    <span class="text-sm font-medium" id="like-count-${design.id}">${design.likes || 0}</span>
+                </button>
+            </div>
+        </div>`;
+    return card;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// 5. UPLOAD DE FICHIER LOCAL (SUPABASE STORAGE)
+// ═══════════════════════════════════════════════════════════════
+function initFileUpload() {
+    const uploadZone = document.getElementById('upload-zone');
+    const fileInput = document.getElementById('design-file');
+    uploadZone.addEventListener('dragover', (e) => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+    uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+    uploadZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadZone.classList.remove('dragover');
+        if (e.dataTransfer.files.length > 0) handleFileSelect(e.dataTransfer.files[0]);
+    });
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) handleFileSelect(e.target.files[0]);
+    });
+}
+
+function handleFileSelect(file) {
+    if (!file.type.startsWith('image/')) { showToast('Veuillez selectionner une image', 'error'); return; }
+    if (file.size > 5 * 1024 * 1024) { showToast('L image ne doit pas depasser 5 Mo', 'error'); return; }
+    uploadFile = file;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        document.getElementById('file-preview-img').src = e.target.result;
+        document.getElementById('file-name').textContent = file.name;
+        document.getElementById('upload-placeholder').classList.add('hidden');
+        document.getElementById('upload-preview').classList.remove('hidden');
+    };
+    reader.readAsDataURL(file);
+}
+
+function clearFileUpload(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    uploadFile = null;
+    document.getElementById('design-file').value = '';
+    document.getElementById('upload-placeholder').classList.remove('hidden');
+    document.getElementById('upload-preview').classList.add('hidden');
+    document.getElementById('upload-progress').classList.add('hidden');
+}
+
+async function uploadImageToStorage(file) {
+    const fileExt = file.name.split('.').pop();
+    const fileName = Date.now() + '_' + Math.random().toString(36).substring(2, 10) + '.' + fileExt;
+    const filePath = 'designs/' + fileName;
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+    const progressContainer = document.getElementById('upload-progress');
+    progressContainer.classList.remove('hidden');
+    progressBar.style.width = '0%';
+    progressText.textContent = 'Upload en cours... 0%';
+    try {
+        const { data, error } = await supabaseClient.storage.from('designs-images').upload(filePath, file, { cacheControl: '3600', upsert: false });
+        if (error) throw error;
+        progressBar.style.width = '100%';
+        progressText.textContent = 'Upload termine !';
+        const { data: urlData } = supabaseClient.storage.from('designs-images').getPublicUrl(filePath);
+        return urlData.publicUrl;
+    } catch (err) {
+        console.error('Erreur upload:', err);
+        showToast('Erreur lors de l upload de l image', 'error');
+        progressContainer.classList.add('hidden');
+        return null;
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// 6. PUBLICATION D'UN DESIGN
+// ═══════════════════════════════════════════════════════════════
+publishForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const title = document.getElementById('design-title').value.trim();
+    const category = document.getElementById('design-category').value;
+    const author = document.getElementById('design-author').value.trim();
+    const email = document.getElementById('design-email').value.trim();
+    const imageUrl = document.getElementById('design-image-url').value.trim();
+    if (!title || !category || !author || !email) {
+        showToast('Veuillez remplir tous les champs obligatoires', 'error');
+        return;
+    }
+    let finalImageUrl = imageUrl;
+    if (uploadFile) {
+        finalImageUrl = await uploadImageToStorage(uploadFile);
+        if (!finalImageUrl) return;
+    }
+    if (!finalImageUrl) {
+        showToast('Veuillez fournir une image (fichier ou URL)', 'error');
+        return;
+    }
+    const submitBtn = document.getElementById('submit-btn');
+    const submitText = document.getElementById('submit-text');
+    submitBtn.disabled = true;
+    submitText.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i>Publication en cours...';
+    try {
+        const { data, error } = await supabaseClient.from('designs').insert([{
+            title: title, category: category, author: author, author_email: email,
+            image_url: finalImageUrl, likes: 0
+        }]).select();
+        if (error) throw error;
+        showToast('Design publie avec succes !', 'success');
+        closeModal();
+        publishForm.reset();
+        clearFileUpload({ preventDefault: function(){}, stopPropagation: function(){} });
+    } catch (err) {
+        console.error('Erreur publication:', err);
+        showToast('Erreur lors de la publication: ' + err.message, 'error');
+    } finally {
+        submitBtn.disabled = false;
+        submitText.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i>Publier mon Design';
+    }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// 7. SUPPRESSION D'UNE PUBLICATION
+// ═══════════════════════════════════════════════════════════════
+async function deleteDesign(event, designId) {
+    event.stopPropagation();
+    if (!confirm('Etes-vous sur de vouloir supprimer cette publication ? Cette action est irreversible.')) return;
+    try {
+        await supabaseClient.from('comments').delete().eq('design_id', designId);
+        const { error } = await supabaseClient.from('designs').delete().eq('id', designId);
+        if (error) throw error;
+        showToast('Publication supprimee avec succes', 'success');
+    } catch (err) {
+        console.error('Erreur suppression:', err);
+        showToast('Erreur lors de la suppression: ' + err.message, 'error');
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// 8. SYSTÈME DE LIKES
+// ═══════════════════════════════════════════════════════════════
+async function toggleLike(event, designId) {
+    event.stopPropagation();
+    if (likedDesigns.has(designId)) { showToast('Vous avez deja aime ce design !', 'info'); return; }
+    const design = allDesigns.find(d => d.id === designId);
+    if (!design) return;
+    const newLikes = (design.likes || 0) + 1;
+    try {
+        const { error } = await supabaseClient.from('designs').update({ likes: newLikes }).eq('id', designId);
+        if (error) throw error;
+        likedDesigns.add(designId);
+        saveLikedDesigns();
+        updateLikeUI(designId, newLikes, true);
+        showToast('Design aime !', 'success');
+    } catch (err) {
+        console.error('Erreur like:', err);
+        showToast('Erreur lors du like', 'error');
+    }
+}
+
+async function toggleLikeFromLightbox() {
+    if (!currentLightboxDesignId) return;
+    await toggleLike({ stopPropagation: function(){} }, currentLightboxDesignId);
+}
+
+function updateLikeUI(designId, likes, isLiked) {
+    const btn = document.getElementById('like-btn-' + designId);
+    const count = document.getElementById('like-count-' + designId);
+    if (btn && count) {
+        count.textContent = likes;
+        if (isLiked) {
+            btn.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-300 bg-red-500/20 text-red-400 border border-red-500/30';
+            btn.innerHTML = '<i class="fa-solid fa-heart animate-heartbeat"></i><span class="text-sm font-medium">' + likes + '</span>';
+        }
+    }
+}
+
+function updateLightboxLikes(likes) {
+    const btn = document.getElementById('lightbox-like-btn');
+    const count = document.getElementById('lightbox-likes-count');
+    if (count) count.textContent = likes;
+    if (btn && likedDesigns.has(currentLightboxDesignId)) {
+        btn.className = 'flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 bg-red-500/20 text-red-400 border border-red-500/30';
+        btn.innerHTML = '<i class="fa-solid fa-heart animate-heartbeat"></i><span id="lightbox-likes-count">' + likes + '</span>';
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// 9. LOCALSTORAGE
+// ═══════════════════════════════════════════════════════════════
+function loadLikedDesigns() {
+    try {
+        const stored = localStorage.getItem('lemon_graphix_liked');
+        if (stored) likedDesigns = new Set(JSON.parse(stored));
+    } catch (e) { likedDesigns = new Set(); }
+}
+function saveLikedDesigns() {
+    localStorage.setItem('lemon_graphix_liked', JSON.stringify([...likedDesigns]));
+}
+
+// ═══════════════════════════════════════════════════════════════
+// 10. FILTRES
+// ═══════════════════════════════════════════════════════════════
+function initFilters() {
+    const buttons = document.querySelectorAll('.filter-btn');
+    buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            buttons.forEach(b => { b.classList.remove('active'); b.classList.add('text-gray-400','border-dark-700'); b.classList.remove('border-lemon-500/30'); });
+            btn.classList.add('active');
+            btn.classList.remove('text-gray-400','border-dark-700');
+            currentFilter = btn.dataset.filter;
+            renderGallery();
+        });
+    });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// 11. MODAL
+// ═══════════════════════════════════════════════════════════════
+function openModal() {
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => { modalContent.classList.remove('scale-95','opacity-0'); modalContent.classList.add('scale-100','opacity-100'); }, 10);
+}
+function closeModal() {
+    modalContent.classList.remove('scale-100','opacity-100');
+    modalContent.classList.add('scale-95','opacity-0');
+    setTimeout(() => { modal.classList.add('hidden'); document.body.style.overflow = ''; }, 300);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// 12. LIGHTBOX
+// ═══════════════════════════════════════════════════════════════
+function openLightbox(designId) {
+    const design = allDesigns.find(d => d.id === designId);
+    if (!design) return;
+    
+    currentLightboxDesignId = designId;
+    
+    // Remplissage des données de base
+    document.getElementById('lightbox-image').src = design.image_url;
+    document.getElementById('lightbox-title').textContent = design.title;
+    document.getElementById('lightbox-author').querySelector('span').textContent = design.author;
+    document.getElementById('lightbox-category').querySelector('span').textContent = design.category;
+    
+    // Gestion du bouton Like (utilisation des Template Literals pour la clarté)
+    const isLiked = likedDesigns.has(designId);
+    const likeBtn = document.getElementById('lightbox-like-btn');
+    
+    likeBtn.innerHTML = `
+        <i class="fa-${isLiked ? 'solid' : 'regular'} fa-heart ${isLiked ? 'animate-heartbeat' : ''}"></i>
+        <span id="lightbox-likes-count">${design.likes || 0}</span>
+    `;
+    
+    likeBtn.className = 'flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 ' + 
+        (isLiked 
+            ? 'bg-red-500/20 text-red-400 border border-red-500/30' 
+            : 'bg-dark-800 text-gray-400 hover:text-red-400 hover:bg-red-500/10 border border-dark-700');
+    
+    // Gestion du bouton Contact (Correction de l'erreur de syntaxe ici)
+    const contactBtn = document.getElementById('lightbox-contact-btn');
+    if (design.author_email) {
+        const subject = encodeURIComponent(`Intérêt pour votre design : ${design.title}`);
+        
+        // Les backticks permettent le retour à la ligne dans le mail
+        const bodyText = `Bonjour ${design.author},\n\nJe suis intéressé(e) par votre design "${design.title}"`;
+        const body = encodeURIComponent(bodyText);
+        
+        contactBtn.href = `mailto:${design.author_email}?subject=${subject}&body=${body}`;
+        contactBtn.classList.remove('hidden');
+    } else {
+        contactBtn.classList.add('hidden');
+    }
+    
+    // Affichage de la lightbox
+    renderComments(designId);
+    lightbox.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+    lightbox.classList.add('hidden');
+    document.body.style.overflow = '';
+    currentLightboxDesignId = null;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// 13. COMMENTAIRES
+// ═══════════════════════════════════════════════════════════════
+function renderComments(designId) {
+    const commentsList = document.getElementById('comments-list');
+    const designComments = allComments.filter(c => c.design_id === designId);
+    const badge = document.getElementById('comments-count-badge');
+    if (badge) badge.textContent = designComments.length;
+    if (designComments.length === 0) {
+        commentsList.innerHTML = '<p class="text-gray-600 text-sm text-center py-8">Aucun commentaire pour le moment. Soyez le premier !</p>';
+        return;
+    }
+    commentsList.innerHTML = designComments.map(comment => {
+        const initial = comment.author_name ? comment.author_name.charAt(0).toUpperCase() : '?';
+        return '<div class="flex gap-3 animate-slide-in-right"><div class="w-8 h-8 rounded-full bg-gradient-to-br from-lemon-500 to-lemon-700 flex items-center justify-center text-dark-900 font-bold text-xs flex-shrink-0">' + initial + '</div><div class="flex-1 comment-bubble"><div class="bg-dark-800/80 rounded-xl rounded-tl-none px-4 py-3"><div class="flex items-center justify-between mb-1"><span class="text-lemon-400 font-semibold text-sm">' + escapeHtml(comment.author_name || 'Anonyme') + '</span><span class="text-gray-600 text-xs">' + formatDate(comment.created_at) + '</span></div><p class="text-gray-300 text-sm leading-relaxed">' + escapeHtml(comment.content) + '</p></div></div></div>';
+    }).join('');
+    commentsList.scrollTop = commentsList.scrollHeight;
+}
+
+function initCommentForm() {
+    const form = document.getElementById('comment-form');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!currentLightboxDesignId) return;
+        const name = document.getElementById('comment-name').value.trim();
+        const email = document.getElementById('comment-email').value.trim();
+        const text = document.getElementById('comment-text').value.trim();
+        if (!name || !email || !text) { showToast('Veuillez remplir tous les champs', 'error'); return; }
+        try {
+            const { error } = await supabaseClient.from('comments').insert([{
+                design_id: currentLightboxDesignId, author_name: name, author_email: email, content: text
+            }]);
+            if (error) throw error;
+            form.reset();
+            showToast('Commentaire publie !', 'success');
+        } catch (err) {
+            console.error('Erreur commentaire:', err);
+            showToast('Erreur lors de la publication du commentaire', 'error');
+        }
+    });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// 14. UTILITAIRES
+// ═══════════════════════════════════════════════════════════════
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diff = (now - date) / 1000;
+    if (diff < 60) return 'A l instant';
+    if (diff < 3600) return 'Il y a ' + Math.floor(diff / 60) + ' min';
+    if (diff < 86400) return 'Il y a ' + Math.floor(diff / 3600) + ' h';
+    if (diff < 604800) return 'Il y a ' + Math.floor(diff / 86400) + ' j';
+    return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function showToast(message, type) {
+    type = type || 'info';
+    const toast = document.createElement('div');
+    const colors = {
+        success: 'bg-lemon-500/20 border-lemon-500/40 text-lemon-400',
+        error: 'bg-red-500/20 border-red-500/40 text-red-400',
+        info: 'bg-blue-500/20 border-blue-500/40 text-blue-400'
+    };
+    const icons = {
+        success: 'fa-circle-check',
+        error: 'fa-circle-xmark',
+        info: 'fa-circle-info'
+    };
+    toast.className = 'toast flex items-center gap-3 px-5 py-4 rounded-xl border backdrop-blur-lg shadow-xl ' + colors[type];
+    toast.innerHTML = '<i class="fa-solid ' + icons[type] + ' text-lg"></i><span class="font-medium text-sm">' + message + '</span>';
+    toastContainer.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('show'));
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 400);
+    }, 4000);
+}
+
+function updateStats() {
+    const count = allDesigns.length;
+    const totalLikes = allDesigns.reduce((sum, d) => sum + (d.likes || 0), 0);
+    const totalComments = allComments.length;
+    animateCounter('stat-count', count);
+    animateCounter('stat-likes', totalLikes);
+    animateCounter('stat-comments', totalComments);
+}
+
+function animateCounter(elementId, target) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    const start = parseInt(el.textContent.replace(/[^0-9]/g, '')) || 0;
+    if (start === target) return;
+    const duration = 1000;
+    const startTime = performance.now();
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        const current = Math.round(start + (target - start) * easeOut);
+        el.textContent = current.toLocaleString('fr-FR');
+        if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+}
+
+function updateConnectionStatus(status) {
+    const dot = document.getElementById('status-dot');
+    const text = document.getElementById('status-text');
+    dot.className = 'status-dot';
+    if (status === 'connected') { dot.classList.add('status-connected'); text.textContent = 'En ligne'; }
+    else if (status === 'connecting') { dot.classList.add('status-connecting'); text.textContent = 'Connexion...'; }
+    else { dot.classList.add('status-disconnected'); text.textContent = 'Hors ligne'; }
+}
+
+function initScrollReveal() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+}
+
+function initNavbarScroll() {
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) navbar.classList.add('bg-dark-950/90', 'backdrop-blur-lg', 'border-b', 'border-dark-800');
+        else navbar.classList.remove('bg-dark-950/90', 'backdrop-blur-lg', 'border-b', 'border-dark-800');
+    });
+}
+
+function initMobileMenu() {
+    mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+    mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+}
+
+function showLoader(show) { galleryLoader.classList.toggle('hidden', !show); }
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { closeModal(); closeLightbox(); }
+});
+
+window.addEventListener('beforeunload', () => { supabaseClient.removeAllChannels(); });
+</script>
+</body>
 </html>
